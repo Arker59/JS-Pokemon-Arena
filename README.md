@@ -2,6 +2,8 @@
 
 SPECIAL THANKS TO ALL THE AUTHORS OF THE PMDCOLLAB : https://github.com/PMDCollab/SpriteCollab/blob/master/spritebot_credits.txt
 
+---
+
 HOW TO USE : 
 
 1) HAVE XAMPP OR JUST LIVE SERVER
