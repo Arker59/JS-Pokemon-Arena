@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Pokemon Arena</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div id="darkOverlay"></div>
+
+  <div id="stats">
+    Alive Pokemons : <span id="aliveCount">0</span>
+  </div>
+
+  <div id="portraitsContainer"></div>
+
+  <div id="winnerMessage"></div>
+  <div id="drawMessage"></div>
+
+  <div id="arena"></div>
+
+  <div id="scoreboard">
+    <h3>LeaderBoard</h3>
+    <table>
+      <thead><tr><th>ID</th><th>Name</th><th>Type</th><th>Kills</th></tr></thead>
+      <tbody id="scoresBody"></tbody>
+    </table>
+  </div>
+
+  <audio id="winMusic" src="sounds/winner.mp3" preload="auto" ></audio>
+  <audio id="drawMusic" src="sounds/draw.mp3" preload="auto" ></audio>
+  <audio id="battleMusic" src="sounds/battle.mp3" preload="auto" loop></audio>
+
+  <script src="script.js"></script>
+</body>
+</html>
