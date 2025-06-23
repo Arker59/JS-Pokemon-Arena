@@ -1,2 +1,10 @@
-# JS-Pokemon-Arena
-a Zero Player JavaScript Pokemon Arena with Animations and Fights.
+# JS POKEMON ARENA
+
+HOW TO USE : 
+
+1) HAVE XAMPP OR JUST LIVE SERVER
+
+2) OPEN INDEX.HTML WITH LIVE SERVER OR XAMPP
+
+3) ENJOY :3
+
