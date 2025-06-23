@@ -322,7 +322,7 @@ function checkEndOfGame() {
 }
 
 //precision pokemons spawn number (ici 20, 2 pour test des choses en fin de game).
-function createPokemons(count = 2) {
+function createPokemons(count = 20) {
   pokemons = [];
   nextId = 1;
   document.getElementById("arena").innerHTML = "";
