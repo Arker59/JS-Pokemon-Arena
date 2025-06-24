@@ -1,6 +1,7 @@
 body {
   margin              : 0;
   background          : url('./sprites/Arena/pageBackGround.png') no-repeat center/cover;
+  background-attachment: fixed;
 }
 
 #darkOverlay {
@@ -34,7 +35,7 @@ body {
 
 #winnerMessage {
   position            : fixed;
-  top                 : 35%;
+  top                 : 20%;
   left                : 50%;
   transform           : translateX(-50%);
   font-size           : 36px;
