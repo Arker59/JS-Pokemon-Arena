@@ -12,3 +12,18 @@ HOW TO USE :
 
 3) ENJOY :3
 
+--- 
+
+Coming Soon :
+
+    - [X] An automated frame animation analysist
+
+    - [ ] An automated selection of pokemon from the "wild"
+
+    - [ ] A self productive pokemon adding function in the arena
+
+    - [ ] A automated random soundtrack player for the arena
+
+    - [ ] A page of "already fought pokemons" (pokedex style)
+
+    - [ ] Update the arena and more fun to make a Single Player game...

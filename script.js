@@ -423,3 +423,5 @@ window.addEventListener(
   },
   { once: true }
 );
+
+//TODO: modifier le script.js pour lire les données du json et plus les infos données et ajouter les données d'animations au css.
