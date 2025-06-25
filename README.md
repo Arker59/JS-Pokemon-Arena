@@ -1,6 +1,11 @@
 # JS POKEMON ARENA
 
-SPECIAL THANKS TO ALL THE AUTHORS OF THE PMDCOLLAB : https://github.com/PMDCollab/SpriteCollab/blob/master/spritebot_credits.txt
+ALL CREDITS FOR THE SPRITES GOES TO THE MPD COLLAB PROJECT TEAM: 
+
+SPRITES USED : [sprites.pmdcollab.org](https://sprites.pmdcollab.org/)
+PMD COLLAB WEBSITE : [pmdcollab.org](https://pmdcollab.org/)
+
+GITHUB : https://github.com/PMDCollab/SpriteCollab/blob/master/spritebot_credits.txt
 
 ---
 
