@@ -1,5 +1,7 @@
 node_modules/
 package-lock.json
 package.json
-src/
 data/*
+sprites/animations
+sprites/portraits
+sprites/credit_names.txt

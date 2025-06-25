@@ -1,0 +1,182 @@
+body {
+  margin              : 0;
+  background          : url('../sprites/Arena/pageBackGround.png') no-repeat center/cover;
+  background-attachment: fixed;
+}
+
+#darkOverlay {
+  position            : fixed;
+  top                 : 0;
+  left                : 0;
+  width               : 100%;
+  height              : 100%;
+  opacity             : 0;
+  pointer-events      : none;
+  background-color    : rgba(0, 0, 0, 0.9);
+  transition          : opacity 2.8s ease;
+  z-index             : 100;
+}
+
+#darkOverlay.active {
+  opacity             : 1;
+  pointer-events      : all;
+}
+
+#arena {
+  position            : relative;
+  width               : 1200px;
+  height              : 800px;
+  margin              : 15px auto;
+  border              : 5px solid #333;
+  border-radius       : 15px;
+  background          : url('../sprites/Arena/arenaBackGround.jpg') center/cover no-repeat;
+  overflow            : hidden;
+}
+
+#winnerMessage {
+  position            : fixed;
+  top                 : 20%;
+  left                : 50%;
+  transform           : translateX(-50%);
+  font-size           : 36px;
+  font-weight         : bold;
+  color               : gold;
+  text-shadow         : 2px 2px 5px black;
+  z-index             : 101;
+}
+
+#drawMessage {
+  position            : fixed;
+  top                 : 35%;
+  left                : 50%;
+  transform           : translateX(-50%);
+  font-size           : 36px;
+  font-weight         : bold;
+  color               : rgb(255, 0, 0);
+  text-shadow         : 2px 2px 5px black;
+  z-index             : 101;
+}
+
+h3 {
+  display             : flex;
+  justify-content     : center;
+  align-items         : center;
+}
+
+#stats {
+  position            : absolute;
+  left                : 20px;
+  color               : rgb(184, 0, 0);
+}
+
+#stats, #scoreboard {
+  width               : 1200px;
+  font-size           : 2em;
+  margin              : 0 auto 10px;
+}
+
+#scoreboard table {
+  width               : 100%;
+  border-collapse     : collapse;
+}
+
+#scoreboard th, #scoreboard td {
+  border              : 1px solid #555;
+  padding             : 4px 8px;
+  text-align          : center;
+}
+
+.winner-row {
+  background-color    : #fcff5a !important;
+}
+
+.dead-row {
+  background-color    : #ffcccc !important;
+}
+
+.pokemon {
+  position            : absolute;
+  width               : var(--frame-width);
+  height              : var(--frame-height);
+  transform           : scale(2);
+  background-repeat   : no-repeat;
+  image-rendering     : pixelated;
+  animation           : PokeAnim var(--time) steps(var(--frame-count)) infinite;
+  z-index             : 99;
+}
+
+.pokemon .hp-bar {
+  position            : absolute;
+  top                 : -6px;
+  left                : 0;
+  width               : 100%;
+  height              : 4px;
+  background          : red;
+}
+
+.pokemon .hp-fill {
+  height              : 100%;
+  background          : limegreen;
+  width               : 100%;
+}
+
+.pokemon.dead {
+  filter              : grayscale(100%) brightness(0.6);
+  opacity             : 0.7;
+  background-position-x: 0 !important;
+  background-position-y: 0 !important;
+  animation           : none !important;
+  z-index             : 98;
+}
+
+#portraitsContainer {
+  width               : 1200px;
+  margin-top          : 15px;
+  margin              : 10px auto;
+  display             : flex;
+  flex-wrap           : wrap;
+  justify-content     : center;
+  gap                 : 50px;
+  padding             : 10px 0;
+}
+
+.portrait {
+  width               : 40px;
+  height              : 40px;
+  transform           : scale(2);
+  background-size     : cover;
+  background-position : center;
+  image-rendering     : pixelated;
+  border-radius       : 4px;
+  transition          : filter 0.3s ease, transform 0.3s ease;
+}
+
+.portrait.hit {
+  outline             : 2px solid rgb(255, 0, 0);
+  transform           : scale(1.9);
+}
+
+.portrait.dead {
+  filter              : grayscale(100%) brightness(0.6);
+  opacity             : 0.6;
+} 
+
+.portrait.win {
+  position            : fixed;
+  top                 : 50%;
+  left                : 50%;
+  transform           : translate(-50%, -50%) scale(6);
+  outline             : 2px solid yellow;
+  filter              : grayscale(100%) sepia(100%) brightness(1.1) hue-rotate(10deg) opacity(1.2);
+  z-index             : 102;
+  transition          : transform 1s ease, top 1s ease, left 1s ease;
+}
+
+@keyframes PokeAnim {
+  from { 
+    background-position-x: 0; 
+  }
+  to { 
+    background-position-x: calc(-1 * var(--frame-count) * var(--frame-width)); 
+  }
+}

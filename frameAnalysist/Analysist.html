@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Analyse Sprite Sheet Tester</title>
+  <style>
+    body {
+      display: flex;
+      gap: 30px;
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      align-items: flex-start;
+    }
+
+    canvas {
+      border: 1px solid #ccc;
+    }
+
+    #info {
+      min-width: 220px;
+    }
+
+    #info h2 {
+      margin-bottom: 0.5em;
+    }
+
+    #info p {
+      margin: 0.3em 0;
+    }
+
+    #previewWrapper {
+      margin-top: 20px;
+    }
+
+    #spritePreview {
+      display: none;
+      margin-top: 50px;
+      margin-left: 30px;
+      width: var(--frame-width);
+      height: var(--frame-height);
+      transform: scale(2);
+      background-repeat: no-repeat;
+      image-rendering: pixelated;
+      animation: PokeAnim var(--time) steps(var(--frame-count)) infinite;
+      border: 1px solid #ccc;
+      content: "";
+    }
+
+    @keyframes PokeAnim {
+      from {
+        background-position-x: 0;
+      }
+
+      to {
+        background-position-x: calc(-1 * var(--frame-count) * var(--frame-width));
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div>
+    <input type="file" id="fileInput" accept="image/*" /><br /><br />
+    <canvas id="canvas"></canvas>
+
+    <div id="previewWrapper">
+      <h3>Image de l'animation :</h3>
+      <div id="spritePreview"></div>
+      <p id="directionLabel">Direction : -</p>
+      <button id="changeDir">Changer direction</button>
+    </div>
+  </div>
+
+  <div id="info">
+    <h2>Infos Sprite</h2>
+    <p id="cols"></p>
+    <p id="frameSize"></p>
+    <p id="totalFrames"></p>
+  </div>
+
+  <script>
+    function detectSpriteFrames(image, numRows = 8, alphaThreshold = 1) {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = image.width;
+      canvas.height = image.height;
+      ctx.drawImage(image, 0, 0);
+
+      const imageWidth = image.width;
+      const imageHeight = image.height;
+      const frameHeight = imageHeight / numRows;
+
+      const imageData = ctx.getImageData(0, 0, imageWidth, frameHeight);
+      const data = imageData.data;
+
+      let activeCols = [];
+
+      for (let x = 0; x < imageWidth; x++) {
+        let foundOpaque = false;
+        for (let y = 0; y < frameHeight; y++) {
+          const index = (y * imageWidth + x) * 4;
+          const alpha = data[index + 3];
+          if (alpha > alphaThreshold) {
+            foundOpaque = true;
+            break;
+          }
+        }
+        activeCols.push(foundOpaque);
+      }
+
+      let colCount = 0;
+      let inFrame = false;
+      for (let i = 0; i < activeCols.length; i++) {
+        if (activeCols[i] && !inFrame) {
+          colCount++;
+          inFrame = true;
+        } else if (!activeCols[i]) {
+          inFrame = false;
+        }
+      }
+
+      const frameWidth = imageWidth / colCount;
+      const totalFrames = colCount * numRows;
+
+      return {
+        frameWidth,
+        frameHeight,
+        columns: colCount,
+        rows: numRows,
+        totalFrames
+      };
+    }
+
+    let directionIndex = 0;
+    let frameHeight = 0;
+
+    const directionNames = [
+      "Bas",
+      "Bas-Droite",
+      "Droite",
+      "Haut-Droite",
+      "Haut",
+      "Haut-Gauche",
+      "Gauche",
+      "Bas-Gauche"
+    ];
+
+    function updateDirectionDisplay() {
+      const preview = document.getElementById("spritePreview");
+      const label = document.getElementById("directionLabel");
+      preview.style.backgroundPositionY = `-${directionIndex * frameHeight}px`;
+      label.textContent = `Direction : ${directionNames[directionIndex]}`;
+    }
+
+    function analyzeImage(img) {
+      const canvas = document.getElementById('canvas');
+      const ctx = canvas.getContext('2d');
+
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0);
+
+      const spriteInfo = detectSpriteFrames(img, 8);
+      document.getElementById('cols').textContent = `Colonnes détectées : ${spriteInfo.columns}`;
+      document.getElementById('frameSize').textContent = `Taille d'une frame : ${spriteInfo.frameWidth.toFixed(2)} x ${spriteInfo.frameHeight.toFixed(2)} px`;
+      document.getElementById('totalFrames').textContent = `Nombre total de frames : ${spriteInfo.totalFrames}`;
+
+      ctx.strokeStyle = 'red';
+      ctx.lineWidth = 1;
+
+      for (let row = 0; row < spriteInfo.rows; row++) {
+        for (let col = 0; col < spriteInfo.columns; col++) {
+          const x = col * spriteInfo.frameWidth;
+          const y = row * spriteInfo.frameHeight;
+          ctx.strokeRect(x, y, spriteInfo.frameWidth, spriteInfo.frameHeight);
+        }
+      }
+
+      return spriteInfo;
+    }
+
+    document.getElementById('fileInput').addEventListener('change', function (event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const img = new Image();
+      img.onload = () => {
+        const spriteInfo = analyzeImage(img);
+
+        const preview = document.getElementById("spritePreview");
+        preview.style.display = "block";
+        preview.style.width = spriteInfo.frameWidth + "px";
+        preview.style.height = spriteInfo.frameHeight + "px";
+        preview.style.backgroundImage = `url(${img.src})`;
+        preview.style.setProperty("--frame-count", spriteInfo.columns);
+        preview.style.setProperty("--time", (spriteInfo.columns * 0.175) + "s");
+        preview.style.setProperty("--frame-width", spriteInfo.frameWidth + "px");
+        preview.style.setProperty("--frame-height", spriteInfo.frameHeight + "px");
+
+        directionIndex = 0;
+        frameHeight = spriteInfo.frameHeight;
+        updateDirectionDisplay();
+      };
+      img.src = URL.createObjectURL(file);
+    });
+
+    document.getElementById('changeDir').addEventListener('click', () => {
+      directionIndex = (directionIndex + 1) % 8;
+      updateDirectionDisplay();
+    });
+  </script>
+</body>
+</html>

@@ -1,38 +1,69 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-  <meta charset="UTF-8" />
-  <title>Pokemon Arena</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JS Pokemon Arena</title>
+  <link href="https://fonts.cdnfonts.com/css/pokemon-solid" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('../sprites/Main/mainBackGround.webp') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Pokemon Solid', sans-serif;
+      color: yellow;
+      text-align: center;
+    }
+
+    h1 {
+      margin-top: 100px;
+      font-size: 3em;
+      text-shadow: 2px 2px 5px black;
+    }
+
+    p {
+        font-size: 2em;
+      text-shadow: 2px 2px 5px black;
+    }
+
+    .btn {
+      font-family: 'Pokemon Solid', sans-serif;
+      margin-top: 50px;
+      padding: 0px 30px;
+      font-size: 1.2em;
+      background-color: rgb(255, 251, 0);
+      color: rgb(0, 26, 255);
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 2px 2px 5px black;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background-color: rgb(182, 179, 0);
+    }
+  </style>
 </head>
-
 <body>
-  <div id="darkOverlay"></div>
-
-  <div id="stats">
-    Alive Pokemons : <span id="aliveCount">0</span>
-  </div>
-
-  <div id="portraitsContainer"></div>
-
-  <div id="winnerMessage"></div>
-  <div id="drawMessage"></div>
-
-  <div id="arena"></div>
-
-  <div id="scoreboard">
-    <h3>LeaderBoard</h3>
-    <table>
-      <thead><tr><th>ID</th><th>Name</th><th>Type</th><th>Kills</th></tr></thead>
-      <tbody id="scoresBody"></tbody>
-    </table>
-  </div>
-
-  <audio id="winMusic" src="sounds/winner.mp3" preload="auto" ></audio>
-  <audio id="drawMusic" src="sounds/draw.mp3" preload="auto" ></audio>
-  <audio id="battleMusic" src="sounds/battle.mp3" preload="auto" loop></audio>
-
-  <script src="script.js"></script>
+  <h1>Welcome to the Pokemon Arena !</h1>
+  <p>Click to start the game</p>
+  <a href="../main/index.html">
+    <button class="btn">S T A R T</button>
+  </a>
+  <audio id="mainMusic" src="../sounds/main.mp3" preload="auto" loop></audio>
 </body>
+<script>
+    window.addEventListener("click", () => {
+        const mainAudio = document.getElementById("mainMusic");
+        if (mainAudio && mainAudio.paused) {
+            mainAudio.currentTime = 0;
+            mainAudio.volume = 0.2;
+            mainAudio.play().catch((err) => console.warn("Autoplay blocked:", err));
+        }
+    },
+    { once: true }
+    );
+</script>
 </html>
