@@ -416,7 +416,7 @@ function showDraw() {
   const drawSound = document.getElementById("drawMusic");
   if (drawSound) {
     drawSound.currentTime = 0;
-    drawSound.volume = 0.5;
+    drawSound.volume = 0.3;
     drawSound.play().catch(console.warn);
   }
 
