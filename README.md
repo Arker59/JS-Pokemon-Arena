@@ -5,6 +5,9 @@ ALL CREDITS FOR THE SPRITES GOES TO THE MPD COLLAB PROJECT TEAM:
 SPRITES USED : [sprites.pmdcollab.org](https://sprites.pmdcollab.org/)
 PMD COLLAB WEBSITE : [pmdcollab.org](https://pmdcollab.org/)
 
+POKEMON DATA USED : [pokemondb.net](https://pokemondb.net/)
+POKEAPI : [pokeapi.co](https://pokeapi.co/)
+
 GITHUB (Credits): [pmdcollab.credits](https://github.com/PMDCollab/SpriteCollab/blob/master/spritebot_credits.txt)
 
 ---
