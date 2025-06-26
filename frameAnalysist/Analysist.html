@@ -3,40 +3,69 @@
 
 <head>
   <meta charset="UTF-8" />
+  <link rel="icon" type="image/x-icon" href="/sprites/favicon.ico">
   <title>Analyse Sprite Sheet Tester</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      display: flex;
-      gap: 30px;
-      font-family: Arial, sans-serif;
-      padding: 30px;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 40px;
       align-items: flex-start;
+      justify-content: center;
+      background: url('../sprites/Main/pokeCenterBackGround.jpeg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #f8f8f8;
+      padding: 40px;
+      margin: 0;
+      min-height: 100vh;
+    }
+
+    h1 {
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     canvas {
-      border: 1px solid #ccc;
+      border: 2px dashed #f0f0f0;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      margin-bottom: 20px;
     }
 
     #info {
-      min-width: 220px;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
     }
 
     #info h2 {
       margin-bottom: 0.5em;
+      border-bottom: 1px solid #fff;
+      padding-bottom: 0.3em;
     }
 
     #info p {
-      margin: 0.3em 0;
+      margin: 0.5em 0;
+      font-size: 0.95em;
     }
 
     #previewWrapper {
       margin-top: 20px;
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 10px;
     }
 
-    #spritePreview {
+    #spritePreview,
+    #spritePreviewJSON {
       display: none;
-      margin-top: 50px;
-      margin-left: 30px;
       width: var(--frame-width);
       height: var(--frame-height);
       transform: scale(2);
@@ -44,8 +73,19 @@
       image-rendering: pixelated;
       animation: PokeAnim var(--time) steps(var(--frame-count)) infinite;
       border: 1px solid #ccc;
-      content: "";
+      border-radius: 6px;
     }
+
+    #spritePreview {
+      margin-top: 50px;
+      margin-left: 25px;
+    }
+
+    #spritePreviewJSON {
+      margin-top: 50px;
+      margin-left: 80px;
+    }
+
 
     @keyframes PokeAnim {
       from {
@@ -56,11 +96,59 @@
         background-position-x: calc(-1 * var(--frame-count) * var(--frame-width));
       }
     }
+
+    input[type="file"],
+    input[type="text"],
+    input[type="submit"],
+    button {
+      display: block;
+      margin: 10px 0;
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: none;
+      font-size: 1em;
+    }
+
+    input[type="file"],
+    input[type="text"] {
+      width: 100%;
+      max-width: 300px;
+    }
+
+    input[type="submit"],
+    button {
+      background-color: #ffcb05;
+      color: #2d2d2d;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    input[type="submit"]:hover,
+    button:hover {
+      background-color: #e6b800;
+    }
+
+    form {
+      margin-top: 20px;
+    }
+
+    /* Responsive */
+    @media screen and (max-width: 900px) {
+      body {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      #spritePreview,
+      #spritePreviewJSON {
+        transform: scale(1.5);
+      }
+    }
   </style>
 </head>
 
 <body>
-
   <div>
     <input type="file" id="fileInput" accept="image/*" /><br /><br />
     <canvas id="canvas"></canvas>
@@ -71,15 +159,22 @@
       <p id="directionLabel">Direction : -</p>
       <button id="changeDir">Changer direction</button>
     </div>
+    <br />
+    <div>
+      <form id="form">
+        <input type="text" id="jsonInput">
+        <input type="submit" value="Choisir Pokémon">
+      </form>
+      <div id="spritePreviewJSON"></div>
+    </div>
   </div>
-
   <div id="info">
     <h2>Infos Sprite</h2>
     <p id="cols"></p>
     <p id="frameSize"></p>
     <p id="totalFrames"></p>
   </div>
-
+  <audio id="centerMusic" src="../sounds/pokeCenter.mp3" preload="auto" loop></audio>
   <script>
     function detectSpriteFrames(image, numRows = 8, alphaThreshold = 1) {
       const canvas = document.createElement('canvas');
@@ -149,9 +244,33 @@
 
     function updateDirectionDisplay() {
       const preview = document.getElementById("spritePreview");
+      const previewJSON = document.getElementById("spritePreviewJSON");
       const label = document.getElementById("directionLabel");
       preview.style.backgroundPositionY = `-${directionIndex * frameHeight}px`;
+      previewJSON.style.backgroundPositionY = `-${directionIndex * frameHeight}px`;
       label.textContent = `Direction : ${directionNames[directionIndex]}`;
+    }
+
+    async function getPokemonJSON(id) {
+      if (id <= 1024 && id >= 1) {
+        ValidID = id;
+      } else {
+        return console.warn('not a Valid id');
+      }
+
+      const pokemonUrl = `../data/pokemon-${ValidID}.json`;
+      const res = await fetch(pokemonUrl);
+      const pokemonData = await res.json();
+
+      const previewJSON = document.getElementById("spritePreviewJSON");
+      previewJSON.style.display = "block";
+      previewJSON.style.width = pokemonData.sprites.frameWidth + "px";
+      previewJSON.style.height = pokemonData.sprites.frameHeight + "px";
+      previewJSON.style.backgroundImage = `url(../${pokemonData.sprites.path})`;
+      previewJSON.style.setProperty("--frame-count", pokemonData.sprites.columns);
+      previewJSON.style.setProperty("--time", (pokemonData.sprites.columns * 0.175) + "s");
+      previewJSON.style.setProperty("--frame-width", pokemonData.sprites.frameWidth + "px");
+      previewJSON.style.setProperty("--frame-height", pokemonData.sprites.frameHeight + "px");
     }
 
     function analyzeImage(img) {
@@ -211,6 +330,25 @@
       directionIndex = (directionIndex + 1) % 8;
       updateDirectionDisplay();
     });
+
+    document.getElementById('form').addEventListener('submit', (e) => {
+      const jsonInput = document.getElementById('jsonInput');
+      e.preventDefault();
+      const id = jsonInput.value;
+      getPokemonJSON(id);
+    });
+
+
+    window.addEventListener("click", () => {
+      const mainAudio = document.getElementById("centerMusic");
+      if (mainAudio && mainAudio.paused) {
+        mainAudio.currentTime = 0;
+        mainAudio.volume = 0.2;
+        mainAudio.play().catch((err) => console.warn("Autoplay blocked:", err));
+      }
+    },
+      { once: true }
+    );
   </script>
 </body>
 </html>

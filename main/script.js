@@ -71,6 +71,9 @@ class Pokemon {
     this.frameWidth = pokemonData.sprites.frameWidth;
     this.animTimer = this.framecount * 0.175;
 
+    this.sleepHeight = pokemonData.sprites.sleep.frameHeight;
+    this.sleepWidth = pokemonData.sprites.sleep.frameWidth;
+
     this.setTimers();
     this.setupSprite();
 
@@ -128,6 +131,8 @@ class Pokemon {
     this.alive = false;
     this.elem.classList.add("dead");
     this.elem.style.backgroundImage = `url('../sprites/animations/${this.id}/Sleep-Anim.png')`;
+    this.elem.style.setProperty("--sleep-width", this.sleepWidth + "px");
+    this.elem.style.setProperty("--sleep-height", this.sleepHeight + "px");
     updateAliveCount();
     updateScoreboard();
 
@@ -383,7 +388,7 @@ function showWinner(pokemon) {
   const msg = document.createElement("div");
 
   msg.id = "winnerMessage";
-  msg.textContent = `🏆 Winner: ${pokemon.name}(${pokemon.id}) of type : ${pokemon.type} !`;
+  msg.textContent = `🏆 Winner:(${pokemon.id}) '${pokemon.name}' of type : ${pokemon.type} !`;
   document.body.appendChild(msg);
 
   if (pokemon.portrait) {

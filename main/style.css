@@ -123,6 +123,8 @@ h3 {
 .pokemon.dead {
   filter              : grayscale(100%) brightness(0.6);
   opacity             : 0.7;
+  width               : var(--sleep-width) !important;
+  height              : var(--sleep-height) !important;
   background-position-x: 0 !important;
   background-position-y: 0 !important;
   animation           : none !important;
