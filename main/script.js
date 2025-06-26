@@ -234,20 +234,45 @@ class Pokemon {
 
     if (this.state === States.SCAN) {
       this.move(this.speed / 4);
-      const prey = pokemons.find(
-        (p) =>
+
+      let closestPrey = null;
+      let minPreyDist = Infinity;
+      for (const p of pokemons) {
+        if (
           p !== this &&
           p.alive &&
           TypeEffectiveness[this.type]?.includes(p.type)
-      );
-      const threat = pokemons.find(
-        (p) =>
+        ) {
+          const dx = this.x - p.x;
+          const dy = this.y - p.y;
+          const dist = dx * dx + dy * dy;
+          if (dist < minPreyDist) {
+            minPreyDist = dist;
+            closestPrey = p;
+          }
+        }
+      }
+
+      let closestThreat = null;
+      let minThreatDist = Infinity;
+      for (const p of pokemons) {
+        if (
           p !== this &&
           p.alive &&
           TypeEffectiveness[p.type]?.includes(this.type)
-      );
-      if (prey) return this.startHunt(prey);
-      if (threat) return this.startFlee(threat);
+        ) {
+          const dx = this.x - p.x;
+          const dy = this.y - p.y;
+          const dist = dx * dx + dy * dy;
+          if (dist < minThreatDist) {
+            minThreatDist = dist;
+            closestThreat = p;
+          }
+        }
+      }
+
+      if (closestPrey) return this.startHunt(closestPrey);
+      if (closestThreat) return this.startFlee(closestThreat);
     }
     if (this.state === States.HUNT && this.target)
       this.chaseOrLose(this.speed, dt);

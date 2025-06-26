@@ -16,8 +16,10 @@
       gap: 40px;
       align-items: flex-start;
       justify-content: center;
-      background: url('../sprites/Main/pokeCenterBackGround.jpeg') no-repeat center center fixed;
-      background-size: cover;
+      background: url('../sprites/Main/PokeCenter.webp') no-repeat center center fixed;
+      background-color: black;
+      background-size: 80%;
+      image-rendering: pixelated;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: #f8f8f8;
       padding: 40px;
@@ -59,6 +61,7 @@
     #previewWrapper {
       margin-top: 20px;
       padding: 15px;
+      max-width: 300px;
       background: rgba(0, 0, 0, 0.5);
       border-radius: 10px;
     }
@@ -79,6 +82,7 @@
     #spritePreview {
       margin-top: 50px;
       margin-left: 25px;
+      margin-bottom: 25px;
     }
 
     #spritePreviewJSON {
@@ -246,8 +250,15 @@
       const preview = document.getElementById("spritePreview");
       const previewJSON = document.getElementById("spritePreviewJSON");
       const label = document.getElementById("directionLabel");
-      preview.style.backgroundPositionY = `-${directionIndex * frameHeight}px`;
-      previewJSON.style.backgroundPositionY = `-${directionIndex * frameHeight}px`;
+
+      if (preview && preview.style.display !== "none") {
+        preview.style.backgroundPositionY = `-${directionIndex * frameHeight}px`;
+      }
+
+      if (previewJSON && previewJSON.style.display !== "none") {
+        previewJSON.style.backgroundPositionY = `-${directionIndex * frameHeight}px`;
+      }
+
       label.textContent = `Direction : ${directionNames[directionIndex]}`;
     }
 
@@ -271,6 +282,10 @@
       previewJSON.style.setProperty("--time", (pokemonData.sprites.columns * 0.175) + "s");
       previewJSON.style.setProperty("--frame-width", pokemonData.sprites.frameWidth + "px");
       previewJSON.style.setProperty("--frame-height", pokemonData.sprites.frameHeight + "px");
+
+        directionIndex = 0;
+        frameHeight = pokemonData.sprites.frameHeight;
+        updateDirectionDisplay();
     }
 
     function analyzeImage(img) {
@@ -351,4 +366,5 @@
     );
   </script>
 </body>
+
 </html>
